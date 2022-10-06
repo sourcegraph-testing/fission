@@ -18,18 +18,18 @@ limitations under the License.
 
 package v1
 
-type CanaryConfigExpansion interface{}
+type CanaryConfigExpansion any
 
-type EnvironmentExpansion interface{}
+type EnvironmentExpansion any
 
-type FunctionExpansion interface{}
+type FunctionExpansion any
 
-type HTTPTriggerExpansion interface{}
+type HTTPTriggerExpansion any
 
-type KubernetesWatchTriggerExpansion interface{}
+type KubernetesWatchTriggerExpansion any
 
-type MessageQueueTriggerExpansion interface{}
+type MessageQueueTriggerExpansion any
 
-type PackageExpansion interface{}
+type PackageExpansion any
 
-type TimeTriggerExpansion interface{}
+type TimeTriggerExpansion any

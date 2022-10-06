@@ -43,7 +43,7 @@ func getIstioServiceLabels(fnName string) map[string]string {
 // If istio is enabled, we create a service for the function.
 func FunctionEventHandlers(logger *zap.Logger, kubernetesClient kubernetes.Interface, fissionfnNamespace string, istioEnabled bool) k8sCache.ResourceEventHandlerFuncs {
 	return k8sCache.ResourceEventHandlerFuncs{
-		AddFunc: func(obj interface{}) {
+		AddFunc: func(obj any) {
 			ctx := context.Background()
 			fn := obj.(*fv1.Function)
 
@@ -132,7 +132,7 @@ func FunctionEventHandlers(logger *zap.Logger, kubernetesClient kubernetes.Inter
 			}
 		},
 
-		DeleteFunc: func(obj interface{}) {
+		DeleteFunc: func(obj any) {
 			ctx := context.Background()
 			fn := obj.(*fv1.Function)
 
@@ -160,7 +160,7 @@ func FunctionEventHandlers(logger *zap.Logger, kubernetesClient kubernetes.Inter
 			}
 		},
 
-		UpdateFunc: func(oldObj, newObj interface{}) {
+		UpdateFunc: func(oldObj, newObj any) {
 			oldFunc := oldObj.(*fv1.Function)
 			newFunc := newObj.(*fv1.Function)
 

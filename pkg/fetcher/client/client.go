@@ -72,7 +72,7 @@ func (c *Client) Upload(ctx context.Context, fr *fetcher.ArchiveUploadRequest) (
 	return &uploadResp, nil
 }
 
-func sendRequest(logger *zap.Logger, ctx context.Context, httpClient *http.Client, req interface{}, url string) ([]byte, error) {
+func sendRequest(logger *zap.Logger, ctx context.Context, httpClient *http.Client, req any, url string) ([]byte, error) {
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, err

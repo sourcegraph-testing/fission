@@ -68,7 +68,7 @@ func getAuthTriggerClient(namespace string) (dynamic.ResourceInterface, error) {
 
 func mqTriggerEventHandlers(logger *zap.Logger, kubeClient kubernetes.Interface, routerURL string) k8sCache.ResourceEventHandlerFuncs {
 	return k8sCache.ResourceEventHandlerFuncs{
-		AddFunc: func(obj interface{}) {
+		AddFunc: func(obj any) {
 			go func() {
 				mqt := obj.(*fv1.MessageQueueTrigger)
 				if mqt.Spec.MqtKind == "fission" {
@@ -110,7 +110,7 @@ func mqTriggerEventHandlers(logger *zap.Logger, kubeClient kubernetes.Interface,
 				}
 			}()
 		},
-		UpdateFunc: func(obj interface{}, newObj interface{}) {
+		UpdateFunc: func(obj any, newObj any) {
 			go func() {
 				mqt := obj.(*fv1.MessageQueueTrigger)
 				newMqt := newObj.(*fv1.MessageQueueTrigger)
@@ -305,23 +305,23 @@ func getAuthTriggerSpec(mqt *fv1.MessageQueueTrigger, authenticationRef string, 
 	if err != nil {
 		return nil, err
 	}
-	var secretTargetRefFields []interface{}
+	var secretTargetRefFields []any
 	for secretField := range secret.Data {
-		secretTargetRefFields = append(secretTargetRefFields, map[string]interface{}{
+		secretTargetRefFields = append(secretTargetRefFields, map[string]any{
 			"name":      mqt.Spec.Secret,
 			"parameter": secretField,
 			"key":       secretField,
 		})
 	}
 	authTriggerObj := &unstructured.Unstructured{
-		Object: map[string]interface{}{
+		Object: map[string]any{
 			"kind":       "TriggerAuthentication",
 			"apiVersion": apiVersion,
-			"metadata": map[string]interface{}{
+			"metadata": map[string]any{
 				"name":      authenticationRef,
 				"namespace": mqt.ObjectMeta.Namespace,
-				"ownerReferences": []interface{}{
-					map[string]interface{}{
+				"ownerReferences": []any{
+					map[string]any{
 						"kind":               "MessageQueueTrigger",
 						"apiVersion":         "fission.io/v1",
 						"name":               mqt.ObjectMeta.Name,
@@ -330,7 +330,7 @@ func getAuthTriggerSpec(mqt *fv1.MessageQueueTrigger, authenticationRef string, 
 					},
 				},
 			},
-			"spec": map[string]interface{}{
+			"spec": map[string]any{
 				"secretTargetRef": secretTargetRefFields,
 			},
 		},
@@ -484,14 +484,14 @@ func deleteDeployment(name string, namespace string, kubeClient kubernetes.Inter
 
 func getScaledObject(mqt *fv1.MessageQueueTrigger, authenticationRef string) *unstructured.Unstructured {
 	return &unstructured.Unstructured{
-		Object: map[string]interface{}{
+		Object: map[string]any{
 			"kind":       "ScaledObject",
 			"apiVersion": apiVersion,
-			"metadata": map[string]interface{}{
+			"metadata": map[string]any{
 				"name":      mqt.ObjectMeta.Name,
 				"namespace": mqt.ObjectMeta.Namespace,
-				"ownerReferences": []interface{}{
-					map[string]interface{}{
+				"ownerReferences": []any{
+					map[string]any{
 						"kind":               "MessageQueueTrigger",
 						"apiVersion":         "fission.io/v1",
 						"name":               mqt.ObjectMeta.Name,
@@ -500,19 +500,19 @@ func getScaledObject(mqt *fv1.MessageQueueTrigger, authenticationRef string) *un
 					},
 				},
 			},
-			"spec": map[string]interface{}{
+			"spec": map[string]any{
 				"cooldownPeriod":  &mqt.Spec.CooldownPeriod,
 				"maxReplicaCount": &mqt.Spec.MaxReplicaCount,
 				"minReplicaCount": &mqt.Spec.MinReplicaCount,
 				"pollingInterval": &mqt.Spec.PollingInterval,
-				"scaleTargetRef": map[string]interface{}{
+				"scaleTargetRef": map[string]any{
 					"name": mqt.ObjectMeta.Name,
 				},
-				"triggers": []interface{}{
-					map[string]interface{}{
+				"triggers": []any{
+					map[string]any{
 						"type":     mqt.Spec.MessageQueueType,
 						"metadata": mqt.Spec.Metadata,
-						"authenticationRef": map[string]interface{}{
+						"authenticationRef": map[string]any{
 							"name": authenticationRef,
 						},
 					},

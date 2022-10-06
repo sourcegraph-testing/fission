@@ -102,17 +102,17 @@ func MakeCanaryConfigMgr(logger *zap.Logger, fissionClient versioned.Interface, 
 
 func (canaryCfgMgr *canaryConfigMgr) CanaryConfigEventHandlers() {
 	(*canaryCfgMgr.canaryConfigInformer).AddEventHandler(k8sCache.ResourceEventHandlerFuncs{
-		AddFunc: func(obj interface{}) {
+		AddFunc: func(obj any) {
 			canaryConfig := obj.(*fv1.CanaryConfig)
 			if canaryConfig.Status.Status == fv1.CanaryConfigStatusPending {
 				go canaryCfgMgr.addCanaryConfig(canaryConfig)
 			}
 		},
-		DeleteFunc: func(obj interface{}) {
+		DeleteFunc: func(obj any) {
 			canaryConfig := obj.(*fv1.CanaryConfig)
 			go canaryCfgMgr.deleteCanaryConfig(canaryConfig)
 		},
-		UpdateFunc: func(oldObj interface{}, newObj interface{}) {
+		UpdateFunc: func(oldObj any, newObj any) {
 			oldConfig := oldObj.(*fv1.CanaryConfig)
 			newConfig := newObj.(*fv1.CanaryConfig)
 			if oldConfig.ObjectMeta.ResourceVersion != newConfig.ObjectMeta.ResourceVersion &&

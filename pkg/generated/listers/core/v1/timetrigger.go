@@ -48,7 +48,7 @@ func NewTimeTriggerLister(indexer cache.Indexer) TimeTriggerLister {
 
 // List lists all TimeTriggers in the indexer.
 func (s *_timeTriggerLister) List(selector labels.Selector) (ret []*v1.TimeTrigger, err error) {
-	err = cache.ListAll(s.indexer, selector, func(m interface{}) {
+	err = cache.ListAll(s.indexer, selector, func(m any) {
 		ret = append(ret, m.(*v1.TimeTrigger))
 	})
 	return ret, err
@@ -80,7 +80,7 @@ type _timeTriggerNamespaceLister struct {
 
 // List lists all TimeTriggers in the indexer for a given namespace.
 func (s _timeTriggerNamespaceLister) List(selector labels.Selector) (ret []*v1.TimeTrigger, err error) {
-	err = cache.ListAllByNamespace(s.indexer, s.namespace, selector, func(m interface{}) {
+	err = cache.ListAllByNamespace(s.indexer, s.namespace, selector, func(m any) {
 		ret = append(ret, m.(*v1.TimeTrigger))
 	})
 	return ret, err

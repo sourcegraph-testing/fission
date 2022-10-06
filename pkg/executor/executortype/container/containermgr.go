@@ -328,7 +328,7 @@ func (caaf *Container) createFunction(ctx context.Context, fn *fv1.Function) (*f
 		return nil, nil
 	}
 
-	fsvcObj, err := caaf.throttler.RunOnce(string(fn.ObjectMeta.UID), func(ableToCreate bool) (interface{}, error) {
+	fsvcObj, err := caaf.throttler.RunOnce(string(fn.ObjectMeta.UID), func(ableToCreate bool) (any, error) {
 		if ableToCreate {
 			return caaf.fnCreate(ctx, fn)
 		}

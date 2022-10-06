@@ -43,14 +43,14 @@ const (
 type (
 	// value used as "value" in cache
 	value struct {
-		val             interface{}
+		val             any
 		activeRequests  int               // number of requests served by function pod
 		currentCPUUsage resource.Quantity // current cpu usage of the specialized function pod
 		cpuLimit        resource.Quantity // if currentCPUUsage is more than cpuLimit cache miss occurs in getValue request
 	}
 	// Cache is simple cache having two keys [function][address] mapped to value and requestChannel for operation on it
 	Cache struct {
-		cache          map[interface{}]map[interface{}]*value
+		cache          map[any]map[any]*value
 		requestChannel chan *request
 		logger         *zap.Logger
 	}
@@ -58,17 +58,17 @@ type (
 	request struct {
 		requestType
 		ctx             context.Context
-		function        interface{}
-		address         interface{}
-		value           interface{}
+		function        any
+		address         any
+		value           any
 		requestsPerPod  int
 		cpuUsage        resource.Quantity
 		responseChannel chan *response
 	}
 	response struct {
 		error
-		allValues   []interface{}
-		value       interface{}
+		allValues   []any
+		value       any
 		totalActive int
 	}
 )
@@ -76,7 +76,7 @@ type (
 // NewPoolCache create a Cache object
 func NewPoolCache(logger *zap.Logger) *Cache {
 	c := &Cache{
-		cache:          make(map[interface{}]map[interface{}]*value),
+		cache:          make(map[any]map[any]*value),
 		requestChannel: make(chan *request),
 		logger:         logger,
 	}
@@ -116,7 +116,7 @@ func (c *Cache) service() {
 			req.responseChannel <- resp
 		case setValue:
 			if _, ok := c.cache[req.function]; !ok {
-				c.cache[req.function] = make(map[interface{}]*value)
+				c.cache[req.function] = make(map[any]*value)
 			}
 			if _, ok := c.cache[req.function][req.address]; !ok {
 				c.cache[req.function][req.address] = &value{}
@@ -128,7 +128,7 @@ func (c *Cache) service() {
 			}
 			c.cache[req.function][req.address].cpuLimit = req.cpuUsage
 		case listAvailableValue:
-			vals := make([]interface{}, 0)
+			vals := make([]any, 0)
 			for key1, values := range c.cache {
 				for key2, value := range values {
 					debugLevel := c.logger.Core().Enabled(zap.DebugLevel)
@@ -147,7 +147,7 @@ func (c *Cache) service() {
 			req.responseChannel <- resp
 		case setCPUUtilization:
 			if _, ok := c.cache[req.function]; !ok {
-				c.cache[req.function] = make(map[interface{}]*value)
+				c.cache[req.function] = make(map[any]*value)
 			}
 			if _, ok := c.cache[req.function][req.address]; ok {
 				c.cache[req.function][req.address].currentCPUUsage = req.cpuUsage
@@ -177,7 +177,7 @@ func (c *Cache) service() {
 }
 
 // GetValue returns a value interface with status inActive else return error
-func (c *Cache) GetValue(ctx context.Context, function interface{}, requestsPerPod int) (interface{}, int, error) {
+func (c *Cache) GetValue(ctx context.Context, function any, requestsPerPod int) (any, int, error) {
 	respChannel := make(chan *response)
 	c.requestChannel <- &request{
 		ctx:             ctx,
@@ -191,7 +191,7 @@ func (c *Cache) GetValue(ctx context.Context, function interface{}, requestsPerP
 }
 
 // ListAvailableValue returns a list of the available function services stored in the Cache
-func (c *Cache) ListAvailableValue() []interface{} {
+func (c *Cache) ListAvailableValue() []any {
 	respChannel := make(chan *response)
 	c.requestChannel <- &request{
 		requestType:     listAvailableValue,
@@ -202,7 +202,7 @@ func (c *Cache) ListAvailableValue() []interface{} {
 }
 
 // SetValue marks the value at key [function][address] as active(begin used)
-func (c *Cache) SetValue(ctx context.Context, function, address, value interface{}, cpuLimit resource.Quantity) {
+func (c *Cache) SetValue(ctx context.Context, function, address, value any, cpuLimit resource.Quantity) {
 	respChannel := make(chan *response)
 	c.requestChannel <- &request{
 		ctx:             ctx,
@@ -216,7 +216,7 @@ func (c *Cache) SetValue(ctx context.Context, function, address, value interface
 }
 
 // SetCPUUtilization updates/sets the CPU utilization limit for the pod
-func (c *Cache) SetCPUUtilization(function, address interface{}, cpuUsage resource.Quantity) {
+func (c *Cache) SetCPUUtilization(function, address any, cpuUsage resource.Quantity) {
 	c.requestChannel <- &request{
 		requestType:     setCPUUtilization,
 		function:        function,
@@ -227,7 +227,7 @@ func (c *Cache) SetCPUUtilization(function, address interface{}, cpuUsage resour
 }
 
 // MarkAvailable marks the value at key [function][address] as available
-func (c *Cache) MarkAvailable(function, address interface{}) {
+func (c *Cache) MarkAvailable(function, address any) {
 	respChannel := make(chan *response)
 	c.requestChannel <- &request{
 		requestType:     markAvailable,
@@ -238,7 +238,7 @@ func (c *Cache) MarkAvailable(function, address interface{}) {
 }
 
 // DeleteValue deletes the value at key composed of [function][address]
-func (c *Cache) DeleteValue(ctx context.Context, function, address interface{}) error {
+func (c *Cache) DeleteValue(ctx context.Context, function, address any) error {
 	respChannel := make(chan *response)
 	c.requestChannel <- &request{
 		ctx:             ctx,

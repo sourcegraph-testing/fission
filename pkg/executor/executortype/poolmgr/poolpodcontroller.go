@@ -151,7 +151,7 @@ func (p *PoolPodController) processRS(rs *apps.ReplicaSet) {
 	}
 }
 
-func (p *PoolPodController) handleRSAdd(obj interface{}) {
+func (p *PoolPodController) handleRSAdd(obj any) {
 	rs, ok := obj.(*apps.ReplicaSet)
 	if !ok {
 		p.logger.Error("unexpected type when adding rs to pool pod controller", zap.Any("obj", obj))
@@ -160,7 +160,7 @@ func (p *PoolPodController) handleRSAdd(obj interface{}) {
 	p.processRS(rs)
 }
 
-func (p *PoolPodController) handleRSUpdate(oldObj interface{}, newObj interface{}) {
+func (p *PoolPodController) handleRSUpdate(oldObj any, newObj any) {
 	rs, ok := newObj.(*apps.ReplicaSet)
 	if !ok {
 		p.logger.Error("unexpected type when updating rs to pool pod controller", zap.Any("obj", newObj))
@@ -169,7 +169,7 @@ func (p *PoolPodController) handleRSUpdate(oldObj interface{}, newObj interface{
 	p.processRS(rs)
 }
 
-func (p *PoolPodController) handleRSDelete(obj interface{}) {
+func (p *PoolPodController) handleRSDelete(obj any) {
 	rs, ok := obj.(*apps.ReplicaSet)
 	if !ok {
 		tombstone, ok := obj.(k8sCache.DeletedFinalStateUnknown)
@@ -186,7 +186,7 @@ func (p *PoolPodController) handleRSDelete(obj interface{}) {
 	p.processRS(rs)
 }
 
-func (p *PoolPodController) enqueueEnvAdd(obj interface{}) {
+func (p *PoolPodController) enqueueEnvAdd(obj any) {
 	key, err := k8sCache.MetaNamespaceKeyFunc(obj)
 	if err != nil {
 		p.logger.Error("error retrieving key from object in poolPodController", zap.Any("obj", obj))
@@ -196,7 +196,7 @@ func (p *PoolPodController) enqueueEnvAdd(obj interface{}) {
 	p.envCreateUpdateQueue.Add(key)
 }
 
-func (p *PoolPodController) enqueueEnvUpdate(oldObj, newObj interface{}) {
+func (p *PoolPodController) enqueueEnvUpdate(oldObj, newObj any) {
 	key, err := k8sCache.MetaNamespaceKeyFunc(newObj)
 	if err != nil {
 		p.logger.Error("error retrieving key from object in poolPodController", zap.Any("obj", key))
@@ -206,7 +206,7 @@ func (p *PoolPodController) enqueueEnvUpdate(oldObj, newObj interface{}) {
 	p.envCreateUpdateQueue.Add(key)
 }
 
-func (p *PoolPodController) enqueueEnvDelete(obj interface{}) {
+func (p *PoolPodController) enqueueEnvDelete(obj any) {
 	env, ok := obj.(*fv1.Environment)
 	if !ok {
 		p.logger.Error("unexpected type when deleting env to pool pod controller", zap.Any("obj", obj))

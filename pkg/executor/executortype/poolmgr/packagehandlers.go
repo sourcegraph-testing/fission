@@ -33,7 +33,7 @@ import (
 // for the package which is used by fetcher component.
 func PackageEventHandlers(logger *zap.Logger, kubernetesClient kubernetes.Interface, fissionfnNamespace string) k8sCache.ResourceEventHandlerFuncs {
 	return k8sCache.ResourceEventHandlerFuncs{
-		AddFunc: func(obj interface{}) {
+		AddFunc: func(obj any) {
 			pkg := obj.(*fv1.Package)
 			logger.Debug("list watch for package reported a new package addition",
 				zap.String("package_name", pkg.ObjectMeta.Name),
@@ -64,7 +64,7 @@ func PackageEventHandlers(logger *zap.Logger, kubernetesClient kubernetes.Interf
 				zap.String("package_namespace", pkg.ObjectMeta.Namespace))
 		},
 
-		UpdateFunc: func(oldObj, newObj interface{}) {
+		UpdateFunc: func(oldObj, newObj any) {
 			oldPkg := oldObj.(*fv1.Package)
 			newPkg := newObj.(*fv1.Package)
 

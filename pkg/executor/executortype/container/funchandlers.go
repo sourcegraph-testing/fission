@@ -27,7 +27,7 @@ import (
 
 func (caaf *Container) FuncInformerHandler(ctx context.Context) k8sCache.ResourceEventHandlerFuncs {
 	return k8sCache.ResourceEventHandlerFuncs{
-		AddFunc: func(obj interface{}) {
+		AddFunc: func(obj any) {
 			fn := obj.(*fv1.Function)
 			fnExecutorType := fn.Spec.InvokeStrategy.ExecutionStrategy.ExecutorType
 			if fnExecutorType != "" && fnExecutorType != fv1.ExecutorTypeContainer {
@@ -46,7 +46,7 @@ func (caaf *Container) FuncInformerHandler(ctx context.Context) k8sCache.Resourc
 				log.Debug("end function create handler")
 			}()
 		},
-		DeleteFunc: func(obj interface{}) {
+		DeleteFunc: func(obj any) {
 			fn := obj.(*fv1.Function)
 			fnExecutorType := fn.Spec.InvokeStrategy.ExecutionStrategy.ExecutorType
 			if fnExecutorType != "" && fnExecutorType != fv1.ExecutorTypeContainer {
@@ -62,7 +62,7 @@ func (caaf *Container) FuncInformerHandler(ctx context.Context) k8sCache.Resourc
 				log.Debug("end function delete handler")
 			}()
 		},
-		UpdateFunc: func(oldObj interface{}, newObj interface{}) {
+		UpdateFunc: func(oldObj any, newObj any) {
 			oldFn := oldObj.(*fv1.Function)
 			newFn := newObj.(*fv1.Function)
 			fnExecutorType := oldFn.Spec.InvokeStrategy.ExecutionStrategy.ExecutorType

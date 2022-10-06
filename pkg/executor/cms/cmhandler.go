@@ -51,9 +51,9 @@ func ConfigMapEventHandlers(ctx context.Context, logger *zap.Logger, fissionClie
 	kubernetesClient kubernetes.Interface, types map[fv1.ExecutorType]executortype.ExecutorType) k8sCache.ResourceEventHandlerFuncs {
 
 	return k8sCache.ResourceEventHandlerFuncs{
-		AddFunc:    func(obj interface{}) {},
-		DeleteFunc: func(obj interface{}) {},
-		UpdateFunc: func(oldObj interface{}, newObj interface{}) {
+		AddFunc:    func(obj any) {},
+		DeleteFunc: func(obj any) {},
+		UpdateFunc: func(oldObj any, newObj any) {
 			oldCm := oldObj.(*apiv1.ConfigMap)
 			newCm := newObj.(*apiv1.ConfigMap)
 			if oldCm.ObjectMeta.ResourceVersion != newCm.ObjectMeta.ResourceVersion {

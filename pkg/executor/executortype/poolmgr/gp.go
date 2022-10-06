@@ -209,7 +209,7 @@ func (gp *GenericPool) updateCPUUtilizationSvc() {
 				p.Add(container.Usage["cpu"])
 			}
 			if value, ok := gp.podFSVCMap.Load(val.ObjectMeta.Name); ok {
-				if valArray, ok1 := value.([]interface{}); ok1 {
+				if valArray, ok1 := value.([]any); ok1 {
 					function, address := valArray[0], valArray[1]
 					gp.fsCache.SetCPUUtilizaton(function.(string), address.(string), p)
 					gp.logger.Info(fmt.Sprintf("updated function %s, address %s, cpuUsage %+v", function.(string), address.(string), p))
@@ -585,7 +585,7 @@ func (gp *GenericPool) getFuncSvc(ctx context.Context, fn *fv1.Function) (*fscac
 	}
 
 	gp.fsCache.PodToFsvc.Store(pod.GetObjectMeta().GetName(), fsvc)
-	gp.podFSVCMap.Store(pod.ObjectMeta.Name, []interface{}{crd.CacheKey(fsvc.Function), fsvc.Address})
+	gp.podFSVCMap.Store(pod.ObjectMeta.Name, []any{crd.CacheKey(fsvc.Function), fsvc.Address})
 	gp.fsCache.AddFunc(ctx, *fsvc)
 
 	metrics.ColdStarts.WithLabelValues(fn.ObjectMeta.Name, fn.ObjectMeta.Namespace).Inc()

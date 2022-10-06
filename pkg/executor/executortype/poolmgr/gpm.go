@@ -681,7 +681,7 @@ func (gpm *GenericPoolManager) WebsocketStartEventChecker(kubeClient kubernetes.
 	stopper := make(chan struct{})
 	defer close(stopper)
 	informer.AddEventHandler(k8sCache.ResourceEventHandlerFuncs{
-		AddFunc: func(obj interface{}) {
+		AddFunc: func(obj any) {
 			mObj := obj.(metav1.Object)
 			gpm.logger.Info("Websocket event detected for pod",
 				zap.String("Pod name", mObj.GetName()))
@@ -722,7 +722,7 @@ func (gpm *GenericPoolManager) NoActiveConnectionEventChecker(kubeClient kuberne
 	stopper := make(chan struct{})
 	defer close(stopper)
 	informer.AddEventHandler(k8sCache.ResourceEventHandlerFuncs{
-		AddFunc: func(obj interface{}) {
+		AddFunc: func(obj any) {
 			mObj := obj.(metav1.Object)
 			gpm.logger.Info("Inactive event detected for pod",
 				zap.String("Pod name", mObj.GetName()))
