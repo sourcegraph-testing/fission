@@ -48,7 +48,7 @@ func NewMessageQueueTriggerLister(indexer cache.Indexer) MessageQueueTriggerList
 
 // List lists all MessageQueueTriggers in the indexer.
 func (s *_messageQueueTriggerLister) List(selector labels.Selector) (ret []*v1.MessageQueueTrigger, err error) {
-	err = cache.ListAll(s.indexer, selector, func(m interface{}) {
+	err = cache.ListAll(s.indexer, selector, func(m any) {
 		ret = append(ret, m.(*v1.MessageQueueTrigger))
 	})
 	return ret, err
@@ -80,7 +80,7 @@ type _messageQueueTriggerNamespaceLister struct {
 
 // List lists all MessageQueueTriggers in the indexer for a given namespace.
 func (s _messageQueueTriggerNamespaceLister) List(selector labels.Selector) (ret []*v1.MessageQueueTrigger, err error) {
-	err = cache.ListAllByNamespace(s.indexer, s.namespace, selector, func(m interface{}) {
+	err = cache.ListAllByNamespace(s.indexer, s.namespace, selector, func(m any) {
 		ret = append(ret, m.(*v1.MessageQueueTrigger))
 	})
 	return ret, err

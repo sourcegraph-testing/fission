@@ -48,7 +48,7 @@ func NewKubernetesWatchTriggerLister(indexer cache.Indexer) KubernetesWatchTrigg
 
 // List lists all KubernetesWatchTriggers in the indexer.
 func (s *_kubernetesWatchTriggerLister) List(selector labels.Selector) (ret []*v1.KubernetesWatchTrigger, err error) {
-	err = cache.ListAll(s.indexer, selector, func(m interface{}) {
+	err = cache.ListAll(s.indexer, selector, func(m any) {
 		ret = append(ret, m.(*v1.KubernetesWatchTrigger))
 	})
 	return ret, err
@@ -80,7 +80,7 @@ type _kubernetesWatchTriggerNamespaceLister struct {
 
 // List lists all KubernetesWatchTriggers in the indexer for a given namespace.
 func (s _kubernetesWatchTriggerNamespaceLister) List(selector labels.Selector) (ret []*v1.KubernetesWatchTrigger, err error) {
-	err = cache.ListAllByNamespace(s.indexer, s.namespace, selector, func(m interface{}) {
+	err = cache.ListAllByNamespace(s.indexer, s.namespace, selector, func(m any) {
 		ret = append(ret, m.(*v1.KubernetesWatchTrigger))
 	})
 	return ret, err

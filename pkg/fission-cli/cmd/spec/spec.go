@@ -163,7 +163,7 @@ func save(data []byte, specDir string, specFile string) error {
 }
 
 // called from `fission * create --spec`
-func SpecSave(resource interface{}, specFile string) error {
+func SpecSave(resource any, specFile string) error {
 	var specDir = "specs"
 
 	meta, kind, data, err := crdToYaml(resource)
@@ -196,7 +196,7 @@ func SpecSave(resource interface{}, specFile string) error {
 	return nil
 }
 
-func SpecDry(resource interface{}) error {
+func SpecDry(resource any) error {
 	_, _, data, err := crdToYaml(resource)
 	if err != nil {
 		return err
@@ -205,7 +205,7 @@ func SpecDry(resource interface{}) error {
 	return nil
 }
 
-func crdToYaml(resource interface{}) (metav1.ObjectMeta, string, []byte, error) {
+func crdToYaml(resource any) (metav1.ObjectMeta, string, []byte, error) {
 	// make sure we're writing a known type
 	var meta metav1.ObjectMeta
 	var kind string
@@ -658,7 +658,7 @@ func (fr *FissionResources) ParseYaml(b []byte, loc *Location, commitLabelVal st
 // otherwise.  compareMetadata and compareSpec control how the
 // equality check is performed.
 // TODO: deprecated SpecExists
-func (fr *FissionResources) SpecExists(resource interface{}, compareMetadata bool, compareSpec bool) interface{} {
+func (fr *FissionResources) SpecExists(resource any, compareMetadata bool, compareSpec bool) any {
 	switch typedres := resource.(type) {
 	case *types.ArchiveUploadSpec:
 		for _, aus := range fr.ArchiveUploadSpecs {
@@ -692,7 +692,7 @@ func (fr *FissionResources) SpecExists(resource interface{}, compareMetadata boo
 	}
 }
 
-func (fr *FissionResources) ExistsInSpecs(resource interface{}) (bool, error) {
+func (fr *FissionResources) ExistsInSpecs(resource any) (bool, error) {
 	switch typedres := resource.(type) {
 	case types.ArchiveUploadSpec:
 		for _, obj := range fr.ArchiveUploadSpecs {

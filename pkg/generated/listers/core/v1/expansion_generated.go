@@ -20,64 +20,64 @@ package v1
 
 // CanaryConfigListerExpansion allows custom methods to be added to
 // CanaryConfigLister.
-type CanaryConfigListerExpansion interface{}
+type CanaryConfigListerExpansion any
 
 // CanaryConfigNamespaceListerExpansion allows custom methods to be added to
 // CanaryConfigNamespaceLister.
-type CanaryConfigNamespaceListerExpansion interface{}
+type CanaryConfigNamespaceListerExpansion any
 
 // EnvironmentListerExpansion allows custom methods to be added to
 // EnvironmentLister.
-type EnvironmentListerExpansion interface{}
+type EnvironmentListerExpansion any
 
 // EnvironmentNamespaceListerExpansion allows custom methods to be added to
 // EnvironmentNamespaceLister.
-type EnvironmentNamespaceListerExpansion interface{}
+type EnvironmentNamespaceListerExpansion any
 
 // FunctionListerExpansion allows custom methods to be added to
 // FunctionLister.
-type FunctionListerExpansion interface{}
+type FunctionListerExpansion any
 
 // FunctionNamespaceListerExpansion allows custom methods to be added to
 // FunctionNamespaceLister.
-type FunctionNamespaceListerExpansion interface{}
+type FunctionNamespaceListerExpansion any
 
 // HTTPTriggerListerExpansion allows custom methods to be added to
 // HTTPTriggerLister.
-type HTTPTriggerListerExpansion interface{}
+type HTTPTriggerListerExpansion any
 
 // HTTPTriggerNamespaceListerExpansion allows custom methods to be added to
 // HTTPTriggerNamespaceLister.
-type HTTPTriggerNamespaceListerExpansion interface{}
+type HTTPTriggerNamespaceListerExpansion any
 
 // KubernetesWatchTriggerListerExpansion allows custom methods to be added to
 // KubernetesWatchTriggerLister.
-type KubernetesWatchTriggerListerExpansion interface{}
+type KubernetesWatchTriggerListerExpansion any
 
 // KubernetesWatchTriggerNamespaceListerExpansion allows custom methods to be added to
 // KubernetesWatchTriggerNamespaceLister.
-type KubernetesWatchTriggerNamespaceListerExpansion interface{}
+type KubernetesWatchTriggerNamespaceListerExpansion any
 
 // MessageQueueTriggerListerExpansion allows custom methods to be added to
 // MessageQueueTriggerLister.
-type MessageQueueTriggerListerExpansion interface{}
+type MessageQueueTriggerListerExpansion any
 
 // MessageQueueTriggerNamespaceListerExpansion allows custom methods to be added to
 // MessageQueueTriggerNamespaceLister.
-type MessageQueueTriggerNamespaceListerExpansion interface{}
+type MessageQueueTriggerNamespaceListerExpansion any
 
 // PackageListerExpansion allows custom methods to be added to
 // PackageLister.
-type PackageListerExpansion interface{}
+type PackageListerExpansion any
 
 // PackageNamespaceListerExpansion allows custom methods to be added to
 // PackageNamespaceLister.
-type PackageNamespaceListerExpansion interface{}
+type PackageNamespaceListerExpansion any
 
 // TimeTriggerListerExpansion allows custom methods to be added to
 // TimeTriggerLister.
-type TimeTriggerListerExpansion interface{}
+type TimeTriggerListerExpansion any
 
 // TimeTriggerNamespaceListerExpansion allows custom methods to be added to
 // TimeTriggerNamespaceLister.
-type TimeTriggerNamespaceListerExpansion interface{}
+type TimeTriggerNamespaceListerExpansion any

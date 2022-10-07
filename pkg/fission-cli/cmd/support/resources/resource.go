@@ -42,7 +42,7 @@ func getPodFileName(dumpdir string, pod metav1.ObjectMeta, containerName string)
 	return filepath.Clean(f)
 }
 
-func writeToFile(file string, obj interface{}) {
+func writeToFile(file string, obj any) {
 	bs, err := yaml.Marshal(obj)
 	if err != nil {
 		console.Error(fmt.Sprintf("Error encoding object: %v", err))

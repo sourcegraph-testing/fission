@@ -37,10 +37,10 @@ type (
 	Value struct {
 		ctime time.Time
 		atime time.Time
-		value interface{}
+		value any
 	}
 	Cache struct {
-		cache          map[interface{}]*Value
+		cache          map[any]*Value
 		ctimeExpiry    time.Duration
 		atimeExpiry    time.Duration
 		requestChannel chan *request
@@ -48,15 +48,15 @@ type (
 
 	request struct {
 		requestType
-		key             interface{}
-		value           interface{}
+		key             any
+		value           any
 		responseChannel chan *response
 	}
 	response struct {
 		error
-		existingValue interface{}
-		mapCopy       map[interface{}]interface{}
-		value         interface{}
+		existingValue any
+		mapCopy       map[any]any
+		value         any
 	}
 )
 
@@ -74,7 +74,7 @@ func (c *Cache) IsOld(v *Value) bool {
 
 func MakeCache(ctimeExpiry, atimeExpiry time.Duration) *Cache {
 	c := &Cache{
-		cache:          make(map[interface{}]*Value),
+		cache:          make(map[any]*Value),
 		ctimeExpiry:    ctimeExpiry,
 		atimeExpiry:    atimeExpiry,
 		requestChannel: make(chan *request),
@@ -133,7 +133,7 @@ func (c *Cache) service() {
 			}
 			// no response
 		case COPY:
-			resp.mapCopy = make(map[interface{}]interface{})
+			resp.mapCopy = make(map[any]any)
 			for k, v := range c.cache {
 				resp.mapCopy[k] = v.value
 			}
@@ -146,7 +146,7 @@ func (c *Cache) service() {
 	}
 }
 
-func (c *Cache) Get(key interface{}) (interface{}, error) {
+func (c *Cache) Get(key any) (any, error) {
 	respChannel := make(chan *response)
 	c.requestChannel <- &request{
 		requestType:     GET,
@@ -159,7 +159,7 @@ func (c *Cache) Get(key interface{}) (interface{}, error) {
 
 // if key exists in the cache, the new value is NOT set; instead an
 // error and the old value are returned
-func (c *Cache) Set(key interface{}, value interface{}) (interface{}, error) {
+func (c *Cache) Set(key any, value any) (any, error) {
 	respChannel := make(chan *response)
 	c.requestChannel <- &request{
 		requestType:     SET,
@@ -171,7 +171,7 @@ func (c *Cache) Set(key interface{}, value interface{}) (interface{}, error) {
 	return resp.existingValue, resp.error
 }
 
-func (c *Cache) Delete(key interface{}) error {
+func (c *Cache) Delete(key any) error {
 	respChannel := make(chan *response)
 	c.requestChannel <- &request{
 		requestType:     DELETE,
@@ -182,7 +182,7 @@ func (c *Cache) Delete(key interface{}) error {
 	return resp.error
 }
 
-func (c *Cache) Copy() map[interface{}]interface{} {
+func (c *Cache) Copy() map[any]any {
 	respChannel := make(chan *response)
 	c.requestChannel <- &request{
 		requestType:     COPY,

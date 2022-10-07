@@ -48,7 +48,7 @@ func NewFunctionLister(indexer cache.Indexer) FunctionLister {
 
 // List lists all Functions in the indexer.
 func (s *_functionLister) List(selector labels.Selector) (ret []*v1.Function, err error) {
-	err = cache.ListAll(s.indexer, selector, func(m interface{}) {
+	err = cache.ListAll(s.indexer, selector, func(m any) {
 		ret = append(ret, m.(*v1.Function))
 	})
 	return ret, err
@@ -80,7 +80,7 @@ type _functionNamespaceLister struct {
 
 // List lists all Functions in the indexer for a given namespace.
 func (s _functionNamespaceLister) List(selector labels.Selector) (ret []*v1.Function, err error) {
-	err = cache.ListAllByNamespace(s.indexer, s.namespace, selector, func(m interface{}) {
+	err = cache.ListAllByNamespace(s.indexer, s.namespace, selector, func(m any) {
 		ret = append(ret, m.(*v1.Function))
 	})
 	return ret, err

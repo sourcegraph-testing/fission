@@ -301,11 +301,11 @@ func (pkgw *packageWatcher) packageInformerHandler() k8sCache.ResourceEventHandl
 		}
 	}
 	return k8sCache.ResourceEventHandlerFuncs{
-		AddFunc: func(obj interface{}) {
+		AddFunc: func(obj any) {
 			pkg := obj.(*fv1.Package)
 			processPkg(pkg)
 		},
-		UpdateFunc: func(oldObj, newObj interface{}) {
+		UpdateFunc: func(oldObj, newObj any) {
 			oldPkg := oldObj.(*fv1.Package)
 			pkg := newObj.(*fv1.Package)
 

@@ -26,8 +26,8 @@ type (
 	EncodeCodec string
 
 	Encoder interface {
-		Marshal(v interface{}) ([]byte, error)
-		Unmarshal(data []byte, v interface{}) error
+		Marshal(v any) ([]byte, error)
+		Unmarshal(data []byte, v any) error
 	}
 
 	JSONEncoder struct{}
@@ -40,11 +40,11 @@ func DefaultJSONEncoder() Encoder {
 	return JSONEncoder{}
 }
 
-func (encoder JSONEncoder) Marshal(v interface{}) ([]byte, error) {
+func (encoder JSONEncoder) Marshal(v any) ([]byte, error) {
 	return json.Marshal(v)
 }
 
-func (encoder JSONEncoder) Unmarshal(data []byte, v interface{}) error {
+func (encoder JSONEncoder) Unmarshal(data []byte, v any) error {
 	return json.Unmarshal(data, v)
 }
 
@@ -54,10 +54,10 @@ func DefaultYAMLEncoder() Encoder {
 	return YAMLEncoder{}
 }
 
-func (encoder YAMLEncoder) Marshal(v interface{}) ([]byte, error) {
+func (encoder YAMLEncoder) Marshal(v any) ([]byte, error) {
 	return yaml.Marshal(v)
 }
 
-func (encoder YAMLEncoder) Unmarshal(data []byte, v interface{}) error {
+func (encoder YAMLEncoder) Unmarshal(data []byte, v any) error {
 	return yaml.Unmarshal(data, v)
 }

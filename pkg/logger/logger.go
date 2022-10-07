@@ -44,7 +44,7 @@ const (
 
 func podInformerHandlers(zapLogger *zap.Logger) k8sCache.ResourceEventHandler {
 	return k8sCache.ResourceEventHandlerFuncs{
-		AddFunc: func(obj interface{}) {
+		AddFunc: func(obj any) {
 			pod := obj.(*corev1.Pod)
 			if !isValidFunctionPodOnNode(pod) || !utils.IsReadyPod(pod) {
 				return
@@ -56,7 +56,7 @@ func podInformerHandlers(zapLogger *zap.Logger) k8sCache.ResourceEventHandler {
 					zap.String("function", funcName), zap.Error(err))
 			}
 		},
-		UpdateFunc: func(_, obj interface{}) {
+		UpdateFunc: func(_, obj any) {
 			pod := obj.(*corev1.Pod)
 			if !isValidFunctionPodOnNode(pod) || !utils.IsReadyPod(pod) {
 				return
@@ -68,7 +68,7 @@ func podInformerHandlers(zapLogger *zap.Logger) k8sCache.ResourceEventHandler {
 					zap.String("function", funcName), zap.Error(err))
 			}
 		},
-		DeleteFunc: func(obj interface{}) {
+		DeleteFunc: func(obj any) {
 			// Do nothing here, let symlink reaper to recycle orphan symlink file
 		},
 	}

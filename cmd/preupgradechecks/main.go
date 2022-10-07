@@ -25,7 +25,7 @@ import (
 	"github.com/fission/fission/pkg/utils/signals"
 )
 
-func getStringArgWithDefault(arg interface{}, defaultValue string) string {
+func getStringArgWithDefault(arg any, defaultValue string) string {
 	if arg != nil {
 		return arg.(string)
 	} else {

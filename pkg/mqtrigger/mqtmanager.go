@@ -183,12 +183,12 @@ func (mqt *MessageQueueTriggerManager) RegisterTrigger(trigger *fv1.MessageQueue
 
 func (mqt *MessageQueueTriggerManager) mqtInformerHandlers() k8sCache.ResourceEventHandlerFuncs {
 	return k8sCache.ResourceEventHandlerFuncs{
-		AddFunc: func(obj interface{}) {
+		AddFunc: func(obj any) {
 			trigger := obj.(*fv1.MessageQueueTrigger)
 			mqt.logger.Debug("Added mqt", zap.Any("trigger: ", trigger.ObjectMeta))
 			mqt.RegisterTrigger(trigger)
 		},
-		DeleteFunc: func(obj interface{}) {
+		DeleteFunc: func(obj any) {
 			trigger := obj.(*fv1.MessageQueueTrigger)
 			mqt.logger.Debug("Delete mqt", zap.Any("trigger: ", trigger.ObjectMeta))
 			triggerSubscription := mqt.getTriggerSubscription(trigger)
@@ -208,7 +208,7 @@ func (mqt *MessageQueueTriggerManager) mqtInformerHandlers() k8sCache.ResourceEv
 			}
 			mqt.logger.Info("message queue trigger deleted", zap.String("trigger_name", trigger.ObjectMeta.Name))
 		},
-		UpdateFunc: func(oldObj interface{}, newObj interface{}) {
+		UpdateFunc: func(oldObj any, newObj any) {
 			trigger := newObj.(*fv1.MessageQueueTrigger)
 			mqt.logger.Debug("Updated mqt", zap.Any("trigger: ", trigger.ObjectMeta))
 			mqt.RegisterTrigger(trigger)

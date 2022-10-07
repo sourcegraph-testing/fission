@@ -12,14 +12,14 @@ import (
 
 func (gp *GenericPool) readyPodEventHandlers() k8sCache.ResourceEventHandlerFuncs {
 	return k8sCache.ResourceEventHandlerFuncs{
-		AddFunc: func(obj interface{}) {
+		AddFunc: func(obj any) {
 			key, err := k8sCache.MetaNamespaceKeyFunc(obj)
 			if err == nil {
 				gp.readyPodQueue.AddAfter(key, 100*time.Millisecond)
 				gp.logger.Debug("add func called", zap.String("key", key))
 			}
 		},
-		DeleteFunc: func(obj interface{}) {
+		DeleteFunc: func(obj any) {
 			key, err := k8sCache.DeletionHandlingMetaNamespaceKeyFunc(obj)
 			if err == nil {
 				gp.readyPodQueue.Done(key)

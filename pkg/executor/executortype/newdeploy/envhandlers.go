@@ -27,9 +27,9 @@ import (
 
 func (deploy *NewDeploy) EnvEventHandlers() k8sCache.ResourceEventHandlerFuncs {
 	return k8sCache.ResourceEventHandlerFuncs{
-		AddFunc:    func(obj interface{}) {},
-		DeleteFunc: func(obj interface{}) {},
-		UpdateFunc: func(oldObj interface{}, newObj interface{}) {
+		AddFunc:    func(obj any) {},
+		DeleteFunc: func(obj any) {},
+		UpdateFunc: func(oldObj any, newObj any) {
 			newEnv := newObj.(*fv1.Environment)
 			oldEnv := oldObj.(*fv1.Environment)
 			ctx := context.Background()

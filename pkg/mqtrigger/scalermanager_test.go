@@ -436,14 +436,14 @@ func Test_getAuthTriggerSpec(t *testing.T) {
 	authenticationRef := fmt.Sprintf("%s-auth-trigger", mqt1.ObjectMeta.Name)
 
 	expectedAuthTriggerObj := &unstructured.Unstructured{
-		Object: map[string]interface{}{
+		Object: map[string]any{
 			"kind":       "TriggerAuthentication",
 			"apiVersion": apiVersion,
-			"metadata": map[string]interface{}{
+			"metadata": map[string]any{
 				"name":      authenticationRef,
 				"namespace": mqt1.ObjectMeta.Namespace,
-				"ownerReferences": []interface{}{
-					map[string]interface{}{
+				"ownerReferences": []any{
+					map[string]any{
 						"kind":               "MessageQueueTrigger",
 						"apiVersion":         "fission.io/v1",
 						"name":               mqt1.ObjectMeta.Name,
@@ -452,34 +452,34 @@ func Test_getAuthTriggerSpec(t *testing.T) {
 					},
 				},
 			},
-			"spec": map[string]interface{}{
-				"secretTargetRef": []interface{}{
-					map[string]interface{}{
+			"spec": map[string]any{
+				"secretTargetRef": []any{
+					map[string]any{
 						"name":      mqt1.Spec.Secret,
 						"parameter": "authMode",
 						"key":       "authMode",
 					},
-					map[string]interface{}{
+					map[string]any{
 						"name":      mqt1.Spec.Secret,
 						"parameter": "username",
 						"key":       "username",
 					},
-					map[string]interface{}{
+					map[string]any{
 						"name":      mqt1.Spec.Secret,
 						"parameter": "password",
 						"key":       "password",
 					},
-					map[string]interface{}{
+					map[string]any{
 						"name":      mqt1.Spec.Secret,
 						"parameter": "ca",
 						"key":       "ca",
 					},
-					map[string]interface{}{
+					map[string]any{
 						"name":      mqt1.Spec.Secret,
 						"parameter": "cert",
 						"key":       "cert",
 					},
-					map[string]interface{}{
+					map[string]any{
 						"name":      mqt1.Spec.Secret,
 						"parameter": "key",
 						"key":       "key",
@@ -546,16 +546,16 @@ func Test_getAuthTriggerSpec(t *testing.T) {
 				return
 			}
 
-			gotSpec := got.Object["spec"].(map[string]interface{})["secretTargetRef"].([]interface{})
+			gotSpec := got.Object["spec"].(map[string]any)["secretTargetRef"].([]any)
 
 			sort.Slice(gotSpec, func(i, j int) bool {
-				return gotSpec[i].(map[string]interface{})["parameter"].(string) < gotSpec[j].(map[string]interface{})["parameter"].(string)
+				return gotSpec[i].(map[string]any)["parameter"].(string) < gotSpec[j].(map[string]any)["parameter"].(string)
 			})
 
-			wantSpec := tt.want.Object["spec"].(map[string]interface{})["secretTargetRef"].([]interface{})
+			wantSpec := tt.want.Object["spec"].(map[string]any)["secretTargetRef"].([]any)
 
 			sort.Slice(wantSpec, func(i, j int) bool {
-				return wantSpec[i].(map[string]interface{})["parameter"].(string) < wantSpec[j].(map[string]interface{})["parameter"].(string)
+				return wantSpec[i].(map[string]any)["parameter"].(string) < wantSpec[j].(map[string]any)["parameter"].(string)
 			})
 
 			if !reflect.DeepEqual(got.Object["kind"], tt.want.Object["kind"]) &&

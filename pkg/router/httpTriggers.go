@@ -281,17 +281,17 @@ func (ts *HTTPTriggerSet) updateTriggerStatusFailed(ht *fv1.HTTPTrigger, err err
 
 func (ts *HTTPTriggerSet) addTriggerHandlers() {
 	ts.triggerInformer.AddEventHandler(k8sCache.ResourceEventHandlerFuncs{
-		AddFunc: func(obj interface{}) {
+		AddFunc: func(obj any) {
 			trigger := obj.(*fv1.HTTPTrigger)
 			go createIngress(ts.logger, trigger, ts.kubeClient)
 			ts.syncTriggers()
 		},
-		DeleteFunc: func(obj interface{}) {
+		DeleteFunc: func(obj any) {
 			ts.syncTriggers()
 			trigger := obj.(*fv1.HTTPTrigger)
 			go deleteIngress(ts.logger, trigger, ts.kubeClient)
 		},
-		UpdateFunc: func(oldObj interface{}, newObj interface{}) {
+		UpdateFunc: func(oldObj any, newObj any) {
 			oldTrigger := oldObj.(*fv1.HTTPTrigger)
 			newTrigger := newObj.(*fv1.HTTPTrigger)
 
@@ -307,13 +307,13 @@ func (ts *HTTPTriggerSet) addTriggerHandlers() {
 
 func (ts *HTTPTriggerSet) addFunctionHandlers() {
 	ts.funcInformer.AddEventHandler(k8sCache.ResourceEventHandlerFuncs{
-		AddFunc: func(obj interface{}) {
+		AddFunc: func(obj any) {
 			ts.syncTriggers()
 		},
-		DeleteFunc: func(obj interface{}) {
+		DeleteFunc: func(obj any) {
 			ts.syncTriggers()
 		},
-		UpdateFunc: func(oldObj interface{}, newObj interface{}) {
+		UpdateFunc: func(oldObj any, newObj any) {
 			oldFn := oldObj.(*fv1.Function)
 			fn := newObj.(*fv1.Function)
 

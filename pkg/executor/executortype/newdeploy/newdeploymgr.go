@@ -363,7 +363,7 @@ func (deploy *NewDeploy) createFunction(ctx context.Context, fn *fv1.Function) (
 
 	logger := otelUtils.LoggerWithTraceID(ctx, deploy.logger)
 
-	fsvcObj, err := deploy.throttler.RunOnce(string(fn.ObjectMeta.UID), func(ableToCreate bool) (interface{}, error) {
+	fsvcObj, err := deploy.throttler.RunOnce(string(fn.ObjectMeta.UID), func(ableToCreate bool) (any, error) {
 		if ableToCreate {
 			return deploy.fnCreate(ctx, fn)
 		}

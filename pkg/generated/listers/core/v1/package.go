@@ -48,7 +48,7 @@ func NewPackageLister(indexer cache.Indexer) PackageLister {
 
 // List lists all Packages in the indexer.
 func (s *_packageLister) List(selector labels.Selector) (ret []*v1.Package, err error) {
-	err = cache.ListAll(s.indexer, selector, func(m interface{}) {
+	err = cache.ListAll(s.indexer, selector, func(m any) {
 		ret = append(ret, m.(*v1.Package))
 	})
 	return ret, err
@@ -80,7 +80,7 @@ type _packageNamespaceLister struct {
 
 // List lists all Packages in the indexer for a given namespace.
 func (s _packageNamespaceLister) List(selector labels.Selector) (ret []*v1.Package, err error) {
-	err = cache.ListAllByNamespace(s.indexer, s.namespace, selector, func(m interface{}) {
+	err = cache.ListAllByNamespace(s.indexer, s.namespace, selector, func(m any) {
 		ret = append(ret, m.(*v1.Package))
 	})
 	return ret, err

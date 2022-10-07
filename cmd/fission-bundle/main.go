@@ -85,7 +85,7 @@ func runLogger(ctx context.Context, logger *zap.Logger) {
 	functionLogger.Start(ctx, logger)
 }
 
-func getPort(logger *zap.Logger, portArg interface{}) int {
+func getPort(logger *zap.Logger, portArg any) int {
 	portArgStr := portArg.(string)
 	port, err := strconv.Atoi(portArgStr)
 	if err != nil {
@@ -94,7 +94,7 @@ func getPort(logger *zap.Logger, portArg interface{}) int {
 	return port
 }
 
-func getStringArgWithDefault(arg interface{}, defaultValue string) string {
+func getStringArgWithDefault(arg any, defaultValue string) string {
 	if arg != nil {
 		return arg.(string)
 	} else {
@@ -102,7 +102,7 @@ func getStringArgWithDefault(arg interface{}, defaultValue string) string {
 	}
 }
 
-func getServiceName(arguments map[string]interface{}) string {
+func getServiceName(arguments map[string]any) string {
 	serviceName := "Fission-Unknown"
 
 	if arguments["--controllerPort"] != nil {

@@ -48,7 +48,7 @@ func NewCanaryConfigLister(indexer cache.Indexer) CanaryConfigLister {
 
 // List lists all CanaryConfigs in the indexer.
 func (s *_canaryConfigLister) List(selector labels.Selector) (ret []*v1.CanaryConfig, err error) {
-	err = cache.ListAll(s.indexer, selector, func(m interface{}) {
+	err = cache.ListAll(s.indexer, selector, func(m any) {
 		ret = append(ret, m.(*v1.CanaryConfig))
 	})
 	return ret, err
@@ -80,7 +80,7 @@ type _canaryConfigNamespaceLister struct {
 
 // List lists all CanaryConfigs in the indexer for a given namespace.
 func (s _canaryConfigNamespaceLister) List(selector labels.Selector) (ret []*v1.CanaryConfig, err error) {
-	err = cache.ListAllByNamespace(s.indexer, s.namespace, selector, func(m interface{}) {
+	err = cache.ListAllByNamespace(s.indexer, s.namespace, selector, func(m any) {
 		ret = append(ret, m.(*v1.CanaryConfig))
 	})
 	return ret, err

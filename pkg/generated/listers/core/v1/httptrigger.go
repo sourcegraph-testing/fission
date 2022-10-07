@@ -48,7 +48,7 @@ func NewHTTPTriggerLister(indexer cache.Indexer) HTTPTriggerLister {
 
 // List lists all HTTPTriggers in the indexer.
 func (s *_hTTPTriggerLister) List(selector labels.Selector) (ret []*v1.HTTPTrigger, err error) {
-	err = cache.ListAll(s.indexer, selector, func(m interface{}) {
+	err = cache.ListAll(s.indexer, selector, func(m any) {
 		ret = append(ret, m.(*v1.HTTPTrigger))
 	})
 	return ret, err
@@ -80,7 +80,7 @@ type _hTTPTriggerNamespaceLister struct {
 
 // List lists all HTTPTriggers in the indexer for a given namespace.
 func (s _hTTPTriggerNamespaceLister) List(selector labels.Selector) (ret []*v1.HTTPTrigger, err error) {
-	err = cache.ListAllByNamespace(s.indexer, s.namespace, selector, func(m interface{}) {
+	err = cache.ListAllByNamespace(s.indexer, s.namespace, selector, func(m any) {
 		ret = append(ret, m.(*v1.HTTPTrigger))
 	})
 	return ret, err
