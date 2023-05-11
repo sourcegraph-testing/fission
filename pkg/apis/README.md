@@ -10,3 +10,4 @@ $ make codgen
 ## Reference
 
 * https://blog.openshift.com/kubernetes-deep-dive-code-generation-customresources/
+Hello World
